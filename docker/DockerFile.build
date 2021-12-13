@@ -5,7 +5,7 @@ ENV SOURCE="https://github.com/xmrig/xmrig.git"
 # Set timezone
 RUN export DEBIAN_FRONTEND=noninteractive; \
     apt-get update; \
-    ln -fs /usr/share/zoneinfo/Australia/Melbourne /etc/localtime; \
+    ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime; \
     apt-get install -y tzdata; \
     dpkg-reconfigure --frontend noninteractive tzdata; \
     apt-get clean all
@@ -34,9 +34,9 @@ ENV HOME /home/docker
 WORKDIR /home/docker
 
 # Add init.sh
-COPY init.sh /home/docker/init.sh
-RUN  chmod +x /home/docker/init.sh 
+COPY  compile-xmrig.sh /home/docker/compile-xmrig.sh
+RUN  chmod +x /home/docker/compile-xmrig.sh
 
 # Define default command.
 
-CMD ["./init.sh"]
+CMD ["./compile-xmrig.sh"]

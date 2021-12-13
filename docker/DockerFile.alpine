@@ -1,0 +1,39 @@
+FROM  alpine:latest
+
+ENV COIN="monero"
+ENV POOL="randomxmonero.usa-west.nicehash.com:3380"
+ENV WALLET="3QGJuiEBVHcHkHQMXWY4KZm63vx1dEjDpL"
+
+ENV HOME="/xmrig"
+ENV WORKER="Docker"
+
+RUN   adduser -S -D -H -h /xmrig miner
+
+RUN   apk --no-cache upgrade && \
+      apk --no-cache add \
+        git \
+        cmake \
+        libuv-dev \
+        build-base \
+        openssl-dev && \
+      apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing hwloc-dev && \
+      git clone https://github.com/NoWiresGB/xmrig.git && \
+      cd xmrig && \
+      mkdir build && \
+      cmake -DCMAKE_BUILD_TYPE=Release . && \
+      make && \
+      ldd xmrig && \
+      apk del \
+        build-base \
+        cmake \
+        git
+
+USER miner
+
+WORKDIR    /xmrig
+VOLUME ["/xmrig"]
+
+COPY mine.sh mine.sh
+
+
+ENTRYPOINT  ["./mine.sh"]

@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM alpine:latest
 
 ENV COIN="monero"
 ENV POOL="randomxmonero.usa-west.nicehash.com:3380"
